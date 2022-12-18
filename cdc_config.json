@@ -1,0 +1,23 @@
+{
+  "tenant": "public",
+  "namespace": "default",
+  "name": "transaction-debezium",
+  "topicName": "database",
+  "archive": "connectors/pulsar-io-debezium-postgres-2.10.2.nar",
+  "parallelism": 1,
+  "processingGuarantees": "ATLEAST_ONCE",
+  "configs": {
+    "database.user": "postgres",
+    "database.dbname": "postgres",
+    "slot.name": "transaction_cdc",
+    "database.hostname": "127.0.0.1",
+    "database.password": "mysecretpassword",
+    "database.server.name": "postgres",
+    "heartbeat.interval.ms": 4000,
+    "database.port": "5432",
+    "pulsar.service.url": "pulsar://127.0.0.1:6650",
+    "schema.whitelist": "public",
+    "table.whitelist": "public.events",
+    "plugin.name": "pgoutput"
+  }
+}

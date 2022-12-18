@@ -1,0 +1,40 @@
+---
+version: '3.3'
+services:
+    pulsar:
+        image: apachepulsar/pulsar-all:2.10.2
+        command: "bin/pulsar standalone"
+        ports:
+            - '8080:8080'
+            - '6650:6650'
+        volumes:
+            - pulsar_data:/pulsar/data
+            - pulsar_conf:/pulsar/conf
+    postgres:
+        image: postgres:14
+        command: "postgres -c 'config_file=/etc/postgresql/postgresql.conf'"
+        ports:
+            - '5432:5432'
+        volumes:
+            - './startup.sh:/docker-entrypoint-initdb.d/startup.sh'
+            - './postgres-with-logical-repl.conf:/etc/postgresql/postgresql.conf'
+            - 'postgres_data:/var/lib/postgresql/data'
+        environment:
+            - POSTGRES_PASSWORD=mysecretpassword
+            - PGDATA=/var/lib/postgresql/data/pgdata
+    debezium:
+        restart: on-failure
+        links:
+            - "postgres"
+            - "pulsar"
+        ports:
+            - '7080:8080'
+        volumes:
+            - '$PWD/conf:/debezium/conf'
+            - '$PWD/data:/debezium/data'
+        image: debezium/server
+
+volumes:
+    pulsar_data:
+    pulsar_conf:
+    postgres_data:
