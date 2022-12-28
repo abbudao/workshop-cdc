@@ -23,6 +23,7 @@ services:
             - POSTGRES_PASSWORD=mysecretpassword
             - PGDATA=/var/lib/postgresql/data/pgdata
     debezium:
+        image: debezium/server
         restart: on-failure
         links:
             - "postgres"
@@ -32,7 +33,6 @@ services:
         volumes:
             - '$PWD/conf:/debezium/conf'
             - '$PWD/data:/debezium/data'
-        image: debezium/server
 
 volumes:
     pulsar_data:
