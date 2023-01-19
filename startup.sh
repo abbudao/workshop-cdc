@@ -13,8 +13,9 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
    
     CREATE TABLE IF NOT EXISTS events (
      id uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-     event_type text,
-     payload bytea,
+     aggregatetype varchar(255),
+     aggregateid varchar(255),
+     payload jsonb,
      create_time TIMESTAMPTZ NOT NULL DEFAULT now()
    );
 
