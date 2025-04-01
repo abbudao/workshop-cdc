@@ -126,9 +126,9 @@ Producer"] -->|"sends ticks"| event_topic_3
 
    This will:
    - Start all required Docker containers
-     - PostgreSQL 16 with logical replication enabled
+     - PostgreSQL 17 with logical replication enabled
      - Apache Pulsar 3.1.1 in standalone mode
-     - Debezium Server 2.5 configured for PostgreSQL
+     - Debezium Server 2.7 configured for PostgreSQL
    - Create a Python virtual environment
    - Install all required dependencies
 
@@ -269,7 +269,7 @@ In this part, we'll explore Change Data Capture and the Outbox pattern, understa
 
 1. Connect to PostgreSQL:
    ```bash
-   docker exec -it workshop-cdc_postgres_1 psql -U postgres
+   docker exec -it workshop-cdc-postgres-1 psql -U postgres
    ```
 
 2. Examine the PostgreSQL configuration for logical replication:
@@ -301,7 +301,7 @@ In this part, we'll explore Change Data Capture and the Outbox pattern, understa
 
 2. Connect to PostgreSQL in another terminal:
    ```bash
-   docker exec -it workshop-cdc_postgres_1 psql -U postgres
+   docker exec -it workshop-cdc-postgres-1 psql -U postgres
    ```
 
 3. Examine the `events` table schema (our outbox table):
@@ -399,7 +399,7 @@ In this part, we'll explore Change Data Capture and the Outbox pattern, understa
 
 1. Examine Debezium's logs to see its operations:
    ```bash
-   docker logs workshop-cdc_debezium_1
+   docker logs workshop-cdc-debezium-1
    ```
 
 2. Look for messages about:
@@ -444,11 +444,11 @@ After completing the exercises, discuss these key points:
 
 - **PostgreSQL Connection Issues**: 
   - Verify PostgreSQL is running with `docker ps` 
-  - Check logs with `docker logs workshop-cdc_postgres_1`
-  - Connect directly: `docker exec -it workshop-cdc_postgres_1 psql -U postgres`
+  - Check logs with `docker logs workshop-cdc-postgres-1`
+  - Connect directly: `docker exec -it workshop-cdc-postgres-1 psql -U postgres`
 
 - **Debezium Not Capturing Events**: 
-  - Check Debezium logs with `docker logs workshop-cdc_debezium_1`
+  - Check Debezium logs with `docker logs workshop-cdc-debezium-1`
   - Verify logical replication slot exists: 
     ```sql
     SELECT * FROM pg_replication_slots;
@@ -457,8 +457,8 @@ After completing the exercises, discuss these key points:
 
 - **Pulsar Connection Issues**: 
   - Verify Pulsar is running with `docker ps` 
-  - Check logs with `docker logs workshop-cdc_pulsar_1`
-  - Check Pulsar status with `docker exec -it workshop-cdc_pulsar_1 bin/pulsar-admin brokers healthcheck`
+  - Check logs with `docker logs workshop-cdc-pulsar-1`
+  - Check Pulsar status with `docker exec -it workshop-cdc-pulsar-1 bin/pulsar-admin brokers healthcheck`
 
 - **Consumer Can't Connect**: 
   - Make sure Pulsar is accessible at `localhost:6650`
