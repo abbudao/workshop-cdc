@@ -13,7 +13,7 @@ services:
             start_period: 30s
 
     postgres:
-        image: postgres:17.4
+        image: postgres:17
         command: "postgres -c 'config_file=/etc/postgresql/postgresql.conf'"
         ports:
             - '5432:5432'
@@ -32,7 +32,7 @@ services:
             start_period: 10s
 
     debezium:
-        image: debezium/server:2.7.3.Final
+        image: quay.io/debezium/server:3.0.8.Final
         restart: on-failure
         depends_on:
             postgres:
@@ -42,7 +42,7 @@ services:
         ports:
             - '7080:8080'
         volumes:
-            - '$PWD/conf:/debezium/conf'
+            - '$PWD/conf:/debezium/config'
             - '$PWD/data:/debezium/data'
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:8080/health"]

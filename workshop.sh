@@ -68,7 +68,7 @@ function insert_test_data() {
     print_header "Inserting test data into PostgreSQL"
     
     echo "Inserting events..."
-    docker exec -it workshop-cdc_postgres_1 psql -U postgres -c "
+    docker exec -it workshop-cdc-postgres-1 psql -U postgres -c "
     INSERT INTO events (aggregatetype, aggregateid, payload)
     VALUES 
       ('user', '123', '{\"event\": \"user-created\", \"name\": \"John Doe\"}'),

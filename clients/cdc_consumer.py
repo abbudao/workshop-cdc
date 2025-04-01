@@ -5,18 +5,18 @@ This consumer listens for CDC events from Debezium that are published to Pulsar.
 It's designed to receive events from the Outbox pattern implementation.
 """
 
-from pulsar import Client, ConsumerType
+from pulsar import Client, ConsumerType, RegexSubscriptionMode
 import json
 import re
 
-# Connect to Pulsar
 client = Client('pulsar://localhost:6650')
 
-# Subscribe to CDC events (using regex to match all event topics)
+# Subscribe to CDC events using regex for all outbox topics
 consumer = client.subscribe(
-    re.compile(r'persistent://public/default/workshop\.event\..*'),
+    re.compile('persistent://public/default/outbox.*'),
     'cdc-subscription',
-    consumer_type=ConsumerType.Shared
+    consumer_type=ConsumerType.Shared,
+    regex_subscription_mode=RegexSubscriptionMode.PersistentOnly
 )
 
 print("Started CDC Event Consumer")
@@ -48,11 +48,14 @@ try:
         except Exception as e:
             # Message failed to process
             print(f"Failed to process CDC event: {e}")
-            consumer.negative_acknowledge(msg)
+            if 'msg' in locals():
+                consumer.negative_acknowledge(msg)
             
 except KeyboardInterrupt:
     print("\nShutting down...")
 finally:
     # Clean up
-    consumer.close()
-    client.close()
+    if 'consumer' in locals():
+        consumer.close()
+    if 'client' in locals():
+        client.close()
