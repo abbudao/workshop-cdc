@@ -127,8 +127,8 @@ Producer"] -->|"sends ticks"| event_topic_3
    This will:
    - Start all required Docker containers
      - PostgreSQL 17 with logical replication enabled
-     - Apache Pulsar 3.1.1 in standalone mode
-     - Debezium Server 2.7 configured for PostgreSQL
+     - Apache Pulsar 4.0.3 in standalone mode
+     - Debezium Server 3.0 configured for PostgreSQL
    - Create a Python virtual environment
    - Install all required dependencies
 

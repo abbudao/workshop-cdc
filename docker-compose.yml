@@ -1,6 +1,6 @@
 services:
     pulsar:
-        image: apachepulsar/pulsar-all:3.1.1
+        image: apachepulsar/pulsar-all:4.0.3
         command: "bin/pulsar standalone"
         ports:
             - '8080:8080'
