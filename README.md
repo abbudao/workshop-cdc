@@ -40,9 +40,13 @@ flowchart LR
     subgraph PostgreSQL["PostgreSQL Database"]
         class PostgreSQL database
         pg[("PostgreSQL")]
-        transactions[("transactions\ntable")]
-        events[("events\ntable\n(Outbox)")]
-        wal[("WAL with\nlogical replication")]
+        transactions[("transactions
+table")]
+        events[("events
+table
+(Outbox)")]
+        wal[("WAL with
+logical replication")]
         
         pg --> transactions
         pg --> events
@@ -51,8 +55,11 @@ flowchart LR
     
     subgraph Debezium["Debezium Server"]
         class Debezium component
-        connector["PostgreSQL\nConnector"]
-        transform["Outbox\nEventRouter\nTransform"]
+        connector["PostgreSQL
+Connector"]
+        transform["Outbox
+EventRouter
+Transform"]
         
         connector --> transform
     end
@@ -61,9 +68,12 @@ flowchart LR
         class Pulsar messaging
         topics["Topics"]
         
-        event_topic_1["Topic:\nworkshop.event.user-created"]
-        event_topic_2["Topic:\nworkshop.event.user-updated"]
-        event_topic_3["Topic:\npersistent://public/default/tick"]
+        event_topic_1["Topic:
+workshop.event.user-created"]
+        event_topic_2["Topic:
+workshop.event.user-updated"]
+        event_topic_3["Topic:
+persistent://public/default/tick"]
         
         topics --> event_topic_1
         topics --> event_topic_2
@@ -72,13 +82,18 @@ flowchart LR
     
     subgraph Consumers["Consumer Patterns"]
         class Consumers consumer
-        exclusive["Exclusive\nConsumer"]
-        failover["Failover\nConsumer"]
-        key_shared["Key-Shared\nConsumer"]
-        shared["Shared\nConsumer"]
+        exclusive["Exclusive
+Consumer"]
+        failover["Failover
+Consumer"]
+        key_shared["Key-Shared
+Consumer"]
+        shared["Shared
+Consumer"]
     end
     
-    Producer["Message\nProducer"] -->|"sends ticks"| event_topic_3
+    Producer["Message
+Producer"] -->|"sends ticks"| event_topic_3
     
     wal -->|"reads changes"| connector
     transform -->|"routes events"| topics
