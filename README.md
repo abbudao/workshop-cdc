@@ -77,7 +77,6 @@ persistent://public/default/tick"]
         
         topics --> event_topic_1
         topics --> event_topic_2
-        topics --> event_topic_3
     end
     
     subgraph Consumers["Consumer Patterns"]
@@ -89,6 +88,8 @@ Consumer"]
         key_shared["Key-Shared
 Consumer"]
         shared["Shared
+Consumer"]
+        cdc_shared_consumer["CDC Shared
 Consumer"]
     end
     
@@ -102,6 +103,10 @@ Producer"] -->|"sends ticks"| event_topic_3
     event_topic_3 -->|"subscribe"| failover
     event_topic_3 -->|"subscribe"| key_shared
     event_topic_1 -->|"subscribe"| shared
+    event_topic_2 -->|"subscribe"| shared
+    event_topic_3 -->|"subscribe"| cdc_shared_consumer
+
+
 ```
 
 ## Prerequisites
