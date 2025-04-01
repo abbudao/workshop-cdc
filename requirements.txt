@@ -1,0 +1,4 @@
+# Updated dependencies to latest versions
+pulsar-client==3.3.0  # Updated from 2.9.1
+python-dotenv==1.0.0  # For environment variables
+colorama==0.4.6      # For colored terminal output
