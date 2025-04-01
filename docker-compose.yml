@@ -1,17 +1,19 @@
----
-version: '3.3'
 services:
     pulsar:
-        image: apachepulsar/pulsar-all:2.10.2
+        image: apachepulsar/pulsar-all:3.1.1
         command: "bin/pulsar standalone"
         ports:
             - '8080:8080'
             - '6650:6650'
-        volumes:
-            - pulsar_data:/pulsar/data
-            - pulsar_conf:/pulsar/conf
+        healthcheck:
+            test: ["CMD", "/pulsar/bin/pulsar-admin", "brokers", "healthcheck"]
+            interval: 15s
+            timeout: 10s
+            retries: 5
+            start_period: 30s
+
     postgres:
-        image: postgres:14
+        image: postgres:17
         command: "postgres -c 'config_file=/etc/postgresql/postgresql.conf'"
         ports:
             - '5432:5432'
@@ -22,19 +24,32 @@ services:
         environment:
             - POSTGRES_PASSWORD=mysecretpassword
             - PGDATA=/var/lib/postgresql/data/pgdata
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+
     debezium:
-        image: debezium/server
+        image: quay.io/debezium/server:3.0.8.Final
         restart: on-failure
-        links:
-            - "postgres"
-            - "pulsar"
+        depends_on:
+            postgres:
+                condition: service_healthy
+            pulsar:
+                condition: service_healthy
         ports:
             - '7080:8080'
         volumes:
-            - '$PWD/conf:/debezium/conf'
+            - '$PWD/conf:/debezium/config'
             - '$PWD/data:/debezium/data'
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 30s
 
 volumes:
-    pulsar_data:
-    pulsar_conf:
     postgres_data:
